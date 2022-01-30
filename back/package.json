@@ -1,0 +1,19 @@
+{
+  "name": "yuyut-back-end",
+  "version": "1.0.0",
+  "description": "Yuyut back end ",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/setting/index.js"
+  },
+  "author": "Atomo Technology",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^14.3.2",
+    "express": "^4.17.2",
+    "helmet": "^5.0.2",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.15.0"
+  }
+}
