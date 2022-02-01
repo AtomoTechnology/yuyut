@@ -19,7 +19,11 @@ Role.init(
       validate: {
         notEmpty: [true, 'El nombre no puede ser vacio'],
         isAlpha: true,
-        isIn: [['user', 'admin', 'employee']],
+        isIn: {
+          args: [['user', 'admin', 'employee']],
+          msg: 'Este rol no es valido',
+        },
+
         len: [3, 10],
       },
       isEven(value) {

@@ -19,39 +19,65 @@ User.init(
         model: 'roles',
         key: 'id',
       },
+      validate: {
+        isNumeric: true,
+      },
     },
     name: {
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
+      validate: {
+        len: [5, 30],
+      },
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        len: [6, 12],
+      },
+      set(value) {
+        this.setDataValue('password', hash(value));
+      },
     },
     email: {
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
+      validate: {
+        isEmail: { msg: 'El email no es valido' },
+      },
     },
     adress: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: { msg: 'La direccion debe contener el numero y timbre del depto.' },
+      },
     },
     phone: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        isNumeric: { msg: 'Debe tener solamente numeros [1234567890]' },
+      },
     },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: Date.now,
     },
-    description: DataTypes.STRING,
     state: {
       type: DataTypes.INTEGER,
       defaultValue: 1,
       allowNull: false,
+      validate: {
+        isIn: {
+          args: [[1, 0]],
+          msg: 'Solo permite 0 | 1',
+        },
+      },
     },
   },
   {
