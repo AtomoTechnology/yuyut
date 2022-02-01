@@ -16,6 +16,17 @@ Role.init(
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
+      validate: {
+        notEmpty: [true, 'El nombre no puede ser vacio'],
+        isAlpha: true,
+        isIn: [['user', 'admin', 'employee']],
+        len: [3, 10],
+      },
+      isEven(value) {
+        if (!value) {
+          throw new Error('El nombre no puede ser vacio');
+        }
+      },
     },
     description: DataTypes.STRING,
     state: {

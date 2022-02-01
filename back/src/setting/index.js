@@ -1,19 +1,24 @@
 const express = require('express');
+const CatchGlobalError = require('../controllers/errorController');
+const appError = require('../helpers/appError');
 const app = express();
 require('dotenv').config();
-
 require('./../db/relationShip');
-
 const sql = require('./../db/db');
 
 const port = process.env.PORT || 5000;
 
+//middleware
+app.use(express.json());
+
 //router mountain
+app.use(require('./routeMountain'));
 
-app.use('/api/v1/roles', require('../routes/rolesRoute'));
-
+//start  server
 app.listen(port, () => {
   console.log(`app running on port ${port}`);
+
+  //connect to the database
   sql
     .sync({
       force: false,
@@ -25,3 +30,13 @@ app.listen(port, () => {
       console.log(err);
     });
 });
+
+//any other path
+app.use('*', (req, res, next) => {
+  next(
+    new appError(`No se pudo encontrar la ruta  : ${req.originalUrl} para este servidor...`, 404)
+  );
+});
+
+//Global error
+app.use(CatchGlobalError);
