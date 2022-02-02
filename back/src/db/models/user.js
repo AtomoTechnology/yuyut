@@ -23,22 +23,20 @@ User.init(
         isNumeric: true,
       },
     },
-    name: {
+    firstname: {
       type: DataTypes.STRING,
-      unique: true,
       allowNull: false,
-      validate: {
-        len: [5, 30],
-      },
+    },
+    lastname: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [6, 12],
-      },
-      set(value) {
-        this.setDataValue('password', hash(value));
+        // len: [6, 12],
+        notEmpty: { msg: 'La contraseña es obligatoria' },
       },
     },
     email: {

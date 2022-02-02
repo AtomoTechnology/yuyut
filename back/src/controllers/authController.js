@@ -2,30 +2,31 @@ const crypto = require('crypto');
 const { promisify } = require('util');
 const catchAsync = require('../helpers/catchAsync');
 const User = require('./../db/models/user');
+const Role = require('./../db/models/role');
 const jwt = require('jsonwebtoken');
 const appError = require('../helpers/appError');
+const { encrypt, comparePassword } = require('../helpers/bcript');
 // const Email = require('../helpers/email');
 
-const createToken = (id) => {
-  return jwt.sign({ id }, process.env.SECRET_TOKEN_NATOURS, {
-    expiresIn: process.env.SECRET_TOKEN_NATOURS_INSPIRE_IN,
-  });
+const createToken = (user) => {
+  return jwt.sign(
+    {
+      id: user.dataValues.id,
+      role: user.role_users.dataValues.name,
+      idRole: user.role_users.dataValues.id,
+    },
+    process.env.SECRET_TOKEN_YUYUT,
+    {
+      expiresIn: process.env.SECRET_TOKEN_YUYUT_INSPIRE_IN,
+    }
+  );
 };
 
 const createSendToken = async (user, statusCode, res) => {
-  const token = createToken(user._id);
-  const cookieOptions = {
-    expiresIn: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-    httpOnly: true,
-  };
-
-  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-  await res.cookie('jwt', token, cookieOptions);
-
-  user.password = undefined;
+  const token = createToken(user);
 
   res.status(statusCode).json({
-    status: 'success',
+    status: true,
     token,
     data: {
       user,
@@ -34,46 +35,47 @@ const createSendToken = async (user, statusCode, res) => {
 };
 
 exports.signUp = catchAsync(async (req, res, next) => {
-  //bad practice
-  const newUser = await User.create(req.body);
-  // const newUser = await User.create({
-  //   name: req.body.name,
-  //   email: req.body.email,
-  //   password: req.body.password,
-  //   passwordConfirm: req.body.passwordConfirm,
-  // });
-  // const url = `${req.protocol}://${req.get('host')}/me`;
-  // console.log(url);
-  // await new Email(newUser, url).sendWelcome();
+  req.body.password = encrypt(req.body.password);
 
-  //create token
-  createSendToken(newUser, 201, res);
-});
-exports.logout = (req, res) => {
-  res.cookie('jwt', 'loggedout', {
-    expires: new Date(Date.now() + 10 * 1000),
-    httpOnly: true,
+  await User.create(req.body);
+
+  res.status(201).json({
+    status: true,
   });
-  res.status(200).json({ status: 'success' });
-};
+});
 
 exports.signIn = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
 
   //validate email and password
   if (!email || !password) {
-    return next(new AppError('Provide a email and a password please.', 400));
+    return next(new appError('INgrese su email y/o la contraseña por favor', 400));
   }
 
-  const user = await User.findOne({ email }).select('+password');
+  const user = await User.findOne({
+    where: { email: email, state: 1 },
+    include: {
+      model: Role,
+      as: 'role_users',
+      where: { state: 1 },
+    },
+  });
+
+  console.log(user);
 
   //validate user and password
-  if (!user || !(await user.checkPassword(password, user.password))) {
-    return next(new AppError('Incorrect Email or  password.', 401));
+  if (!user || !(await comparePassword(password, user.dataValues.password))) {
+    return next(new appError('Contraseña y/o email incorrecto', 401));
   }
+  //  console.log(user.role_users.dataValues);
+  //  return;
 
   //create token
-  createSendToken(user, 200, res);
+  const token = createToken(user);
+
+  res.status(200).json({
+    token: token,
+  });
 });
 
 exports.delete = catchAsync(async (req, res, next) => {
@@ -90,40 +92,49 @@ exports.delete = catchAsync(async (req, res, next) => {
 exports.protect = catchAsync(async (req, res, next) => {
   let token;
   //getting token
+  console.log(req.headers);
+
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     token = req.headers.authorization.split(' ')[1];
-  } else if (req.cookies.jwt) {
-    token = req.cookies.jwt;
   }
 
   //validate token
   if (!token) {
-    return next(new AppError('You are not logged , please log in to get access!', 401));
+    return next(new appError('No estás loggeado , por favor inicia session .', 401));
   }
 
   //vaerify token
-  const decoded = await promisify(jwt.verify)(token, process.env.SECRET_TOKEN_NATOURS);
+  const decoded = await promisify(jwt.verify)(token, process.env.SECRET_TOKEN_YUYUT);
+  console.log(decoded);
+
+  // return;
 
   //check if user exist
-  const currentUser = await User.findById(decoded.id);
+  const currentUser = await User.findOne({ where: { id: decoded.id, state: 1 } });
   if (!currentUser) {
-    return next(new AppError('The user does no longer exist', 401));
+    return next(new appError('Este usuario ya no existe o se dio de baja', 401));
   }
 
   //check if user change the password
-  if (currentUser.changePasswordAfter(decoded.iat)) {
-    return next(new AppError('This user recently changed his password . Please log in again', 401));
-  }
+  // if (currentUser.changePasswordAfter(decoded.iat)) {
+  //   return next(new appError('El usuario cambió su contraseña recientemente', 401));
+  // }
 
+  // console.log(currentUser);
   //grant the access
-  req.user = currentUser;
+  req.user = decoded;
   next();
 });
 
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
-      return next(new AppError('You do not have permission to perform this application', 403));
+      return next(
+        new appError(
+          `No tiene permiso para realizar esta accion con el role :  ${req.user.role} .`,
+          403
+        )
+      );
     }
     next();
   };
