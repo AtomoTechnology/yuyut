@@ -20,6 +20,8 @@ exports.Create = catchAsync(async (req, res, next) => {
   const { name, description } = req.body;
 
   const role = await Role.create({ name, description });
+  console.log(role.toJSON());
+  console.log(role);
 
   res.json({
     status: true,

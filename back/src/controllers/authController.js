@@ -11,9 +11,9 @@ const { encrypt, comparePassword } = require('../helpers/bcript');
 const createToken = (user) => {
   return jwt.sign(
     {
-      id: user.dataValues.id,
-      role: user.role_users.dataValues.name,
-      idRole: user.role_users.dataValues.id,
+      id: user.id,
+      role: user.role_users.name,
+      idRole: user.role_users.id,
     },
     process.env.SECRET_TOKEN_YUYUT,
     {
@@ -61,7 +61,7 @@ exports.signIn = catchAsync(async (req, res, next) => {
     },
   });
 
-  console.log(user);
+  console.log(user.toJSON());
 
   //validate user and password
   if (!user || !(await comparePassword(password, user.dataValues.password))) {
@@ -71,7 +71,7 @@ exports.signIn = catchAsync(async (req, res, next) => {
   //  return;
 
   //create token
-  const token = createToken(user);
+  const token = createToken(user.toJSON());
 
   res.status(200).json({
     token: token,

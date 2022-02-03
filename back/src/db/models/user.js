@@ -26,6 +26,9 @@ User.init(
     firstname: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: { msg: 'El nombre no puede ser vacio' },
+      },
     },
     lastname: {
       type: DataTypes.STRING,

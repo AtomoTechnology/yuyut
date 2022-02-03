@@ -1,3 +1,4 @@
+const Role = require('../db/models/role');
 const appError = require('../helpers/appError');
 const catchAsync = require('../helpers/catchAsync');
 const User = require('./../db/models/user');
@@ -48,7 +49,15 @@ const factory = require('./handlerFactory');
 // exports.uploadUserPhoto = upload.single('photo');
 
 exports.GetAll = catchAsync(async (req, res, next) => {
-  const users = await User.findAll();
+  const users = await User.findAll({
+    // attributes: ['id', 'firstname'],
+    include: {
+      // attributes: ['name', 'id'],
+      model: Role,
+      as: 'role_users',
+      where: { state: 1 },
+    },
+  });
 
   res.status(200).json({
     status: true,
