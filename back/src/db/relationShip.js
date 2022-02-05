@@ -1,5 +1,4 @@
 const Role = require('./models/role');
-const Complement = require('./models/complement');
 const User = require('./models/user');
 const Price = require('./models/price');
 const Menu = require('./models/menu');
@@ -8,7 +7,22 @@ const Status = require('./models/status');
 const StatusOrder = require('./models/statusOrder');
 const Contact = require('./models/contact');
 const Historyprices = require('./models/historyPrices');
+const OrderDetail = require('./models/orderDetail');
 
-Role.hasOne(User, { as: 'users_roles', foreignKey: 'idRole' });
-User.belongsTo(Role, { as: 'role_users', foreignKey: 'idRole' });
-// User.(Role, { as: 'role_users', foreignKey: 'idRole' });
+Role.hasMany(User);
+User.belongsTo(Role);
+
+Status.belongsToMany(Order, { through: StatusOrder });
+Order.belongsToMany(Status, { through: StatusOrder });
+
+Price.hasMany(Menu);
+Menu.belongsTo(Price);
+
+Price.belongsToMany(User, { through: Historyprices });
+User.belongsToMany(Price, { through: Historyprices });
+
+Order.belongsToMany(Menu, { through: OrderDetail });
+Menu.belongsToMany(Order, { through: OrderDetail });
+
+User.hasMany(Order);
+Order.belongsTo(User);

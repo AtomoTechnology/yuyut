@@ -1,44 +1,52 @@
 const { Model, DataTypes } = require('sequelize');
 const sql = require('./../db');
 
-class Historyprices extends Model {}
+class OrderDetail extends Model {}
 
-Historyprices.init(
+OrderDetail.init(
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       allowNull: false,
       unique: true,
       autoIncrement: true,
       primaryKey: true,
     },
-    // idUser: {
+    // idOrder: {
     //   type: DataTypes.INTEGER,
     //   allowNull: false,
     //   references: {
-    //     model: 'users',
+    //     model: 'orders',
     //     key: 'id',
     //   },
     //   validate: {
     //     isNumeric: true,
     //   },
     // },
-    // idPrecio: {
+    // idMenu: {
     //   type: DataTypes.INTEGER,
     //   allowNull: false,
     //   references: {
-    //     model: 'prices',
+    //     model: 'menus',
     //     key: 'id',
     //   },
     //   validate: {
     //     isNumeric: true,
     //   },
     // },
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        isNumeric: { msg: 'Debe ser un numero entero' },
+      },
+    },
   },
   {
     sequelize: sql,
-    modelName: 'historyprices',
+    modelName: 'order_details',
   }
 );
 
-module.exports = Historyprices;
+module.exports = OrderDetail;

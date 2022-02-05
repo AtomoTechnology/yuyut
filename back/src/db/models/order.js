@@ -12,42 +12,29 @@ Order.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    idUser: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'users',
-        key: 'id',
-      },
-      validate: {
-        isNumeric: true,
-      },
-    },
-    idMenu: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'menus',
-        key: 'id',
-      },
-      validate: {
-        isNumeric: true,
-      },
-    },
-    idComplement: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: 'complements',
-        key: 'id',
-      },
-    },
+    // idUser: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: false,
+    //   references: {
+    //     model: 'users',
+    //     key: 'id',
+    //   },
+    //   validate: {
+    //     isNumeric: true,
+    //   },
+    // },
+    // idMenu: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: false,
+    //   references: {
+    //     model: 'menus',
+    //     key: 'id',
+    //   },
+    //   validate: {
+    //     isNumeric: true,
+    //   },
+    // },
 
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Date.now,
-    },
     state: {
       type: DataTypes.INTEGER,
       defaultValue: 1,

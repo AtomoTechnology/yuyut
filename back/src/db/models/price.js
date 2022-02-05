@@ -20,11 +20,7 @@ Price.init(
         notEmpty: [true, 'El precio no puede ser vacio'],
       },
     },
-    date: {
-      type: DataTypes.DATE,
-      default: Date.now,
-      allowNull: false,
-    },
+
     state: {
       type: DataTypes.INTEGER,
       defaultValue: 1,

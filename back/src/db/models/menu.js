@@ -33,19 +33,20 @@ Menu.init(
       defaultValue: 1,
       allowNull: false,
     },
-    createdAt: {
-      type: DataTypes.DATE,
-      defaultValue: Date.now,
-      allowNull: false,
-    },
-    idPrice: {
+    type: {
       type: DataTypes.INTEGER,
+      defaultValue: 1,
       allowNull: false,
-      references: {
-        model: 'prices',
-        key: 'id',
-      },
+      // 1 : normal , 2 : Complemento , 3 : Postre
     },
+    // idPrice: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: false,
+    //   references: {
+    //     model: 'prices',
+    //     key: 'id',
+    //   },
+    // },
   },
   {
     sequelize: sql,

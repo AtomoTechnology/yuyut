@@ -12,17 +12,17 @@ User.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    idRole: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'roles',
-        key: 'id',
-      },
-      validate: {
-        isNumeric: true,
-      },
-    },
+    // roleId: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: false,
+    //   references: {
+    //     model: 'roles',
+    //     key: 'id',
+    //   },
+    //   validate: {
+    //     isNumeric: true,
+    //   },
+    // },
     firstname: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -33,6 +33,15 @@ User.init(
     lastname: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    fullName: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        return `${this.firstname} ${this.lastname}`;
+      },
+      set(value) {
+        throw new Error('No podes settear este atributo');
+      },
     },
     password: {
       type: DataTypes.STRING,
@@ -63,11 +72,6 @@ User.init(
       validate: {
         isNumeric: { msg: 'Debe tener solamente numeros [1234567890]' },
       },
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Date.now,
     },
     state: {
       type: DataTypes.INTEGER,

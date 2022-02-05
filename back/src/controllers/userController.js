@@ -50,12 +50,12 @@ const factory = require('./handlerFactory');
 
 exports.GetAll = catchAsync(async (req, res, next) => {
   const users = await User.findAll({
-    // attributes: ['id', 'firstname'],
+    attributes: { exclude: ['password'] },
     include: {
-      // attributes: ['name', 'id'],
+      attributes: ['name', 'id'],
       model: Role,
-      as: 'role_users',
       where: { state: 1 },
+      // as: 'role_users',
     },
   });
 
@@ -66,7 +66,32 @@ exports.GetAll = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getUser = factory.getOne(User);
+exports.StatsUsers = catchAsync(async (req, res, next) => {
+  const [resp] = await User.sequelize
+    .query(`select count(usr.id) QuantUsers , max(idRole) , min(idRole)
+                            from users usr
+                            inner join roles rol
+                            on rol.id = usr.idRole
+                            group by usr.state`);
+
+  console.log(resp);
+  res.json({
+    ok: true,
+  });
+});
+
+exports.getUser = catchAsync(async (req, res, next) => {
+  const user = await User.findByPk(req.params.id);
+  const role = await user.getRole();
+  console.log(user.toJSON(), role.toJSON());
+  user.toJSON().role = role.toJSON().name;
+
+  res.status(200).json({
+    status: true,
+    results: user.length,
+    data: user,
+  });
+});
 exports.updateUser = factory.updateOne(User);
 exports.deleteUser = factory.deleteOne(User);
 
