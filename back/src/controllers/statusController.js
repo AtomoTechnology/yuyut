@@ -1,85 +1,88 @@
 const appError = require('../helpers/appError');
 const catchAsync = require('../helpers/catchAsync');
-const Role = require('./../db/models/role');
+const Status = require('../db/models/status');
 const { Op } = require('sequelize');
 
 exports.GetAll = async (req, res, next) => {
-  const roles = await Role.findAll({
+  const statuss = await Status.findAll({
     where: req.query,
     order: [['name', 'ASC']],
-    include: 'users',
-    // paranoid: false,
   });
 
   res.status(process.env.SUCCESS_CODE).json({
     status: true,
-    results: roles.length,
-    data: { roles },
+    results: statuss.length,
+    data: {
+      statuss,
+    },
   });
 };
 
 exports.Create = catchAsync(async (req, res, next) => {
-  const { name, description } = req.body;
+  const { name } = req.body;
 
-  const role = await Role.create({ name, description });
-  console.log(role.toJSON());
-  console.log(role);
-
-  res.status(process.env.SUCCESS_CODE).json({
+  const stat = await Status.create({ name });
+  res.json({
     status: true,
-    msg: 'Rol creado con existo',
+    msg: 'Estado creado con existo',
 
-    data: { role },
+    data: {
+      stat,
+    },
   });
 });
 
 exports.DeleteOne = catchAsync(async (req, res, next) => {
   const id = req.params.id;
-  const role = await Role.destroy({
+  const stat = await Status.destroy({
     where: { id },
-    // force: true,
   });
 
-  if (!role) return next(new appError(`No existe role con el id : ${id}. `, process.env.FAIL_CODE));
+  if (!stat)
+    return next(new appError(`No existe Status con el id : ${id}. `, process.env.FAIL_CODE));
 
   res.status(process.env.SUCCESS_CODE).json({
     status: true,
-    msg: 'Rol borrado con existo',
+    msg: 'Estado borrado con existo',
   });
 });
 
 exports.UpdateOne = catchAsync(async (req, res, next) => {
   const id = req.params.id;
 
-  const role = await Role.update(req.body, {
+  const stat = await Status.update(req.body, {
     where: { id },
   });
 
-  if (!role[0])
+  if (!stat[0])
     return next(
       new appError(
-        'No se pudo modificar el role y/o los datos no se cambiaron...',
+        'No se pudo modificar el Status y/o los datos no se cambiaron...',
         process.env.FAIL_CODE
       )
     );
 
   res.status(process.env.SUCCESS_CODE).json({
     status: true,
-    msg: 'Rol actualizado con existo',
-    data: { role },
+    msg: 'Estado actualizado con existo',
+    data: {
+      stat,
+    },
   });
 });
 
 exports.GetById = catchAsync(async (req, res, next) => {
-  const role = await Role.findByPk(req.params.id);
+  const stat = await Status.findByPk(req.params.id);
 
-  if (!role)
+  if (!stat)
     return next(
-      new appError(`No existe role con el id : ${req.params.id}. `, process.env.FAIL_CODE)
+      new appError(`No existe Status con el id : ${req.params.id}. `, process.env.FAIL_CODE)
     );
 
   res.status(process.env.SUCCESS_CODE).json({
     status: true,
-    data: { role },
+    data: {
+      stat,
+    },
   });
 });

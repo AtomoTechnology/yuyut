@@ -12,8 +12,8 @@ const createToken = (user) => {
   return jwt.sign(
     {
       id: user.id,
-      role: user.role_users.name,
-      idRole: user.role_users.id,
+      role: user.role.name,
+      idRole: user.role.id,
     },
     process.env.SECRET_TOKEN_YUYUT,
     {
@@ -56,12 +56,9 @@ exports.signIn = catchAsync(async (req, res, next) => {
     where: { email: email, state: 1 },
     include: {
       model: Role,
-      as: 'role_users',
       where: { state: 1 },
     },
   });
-
-  console.log(user.toJSON());
 
   //validate user and password
   if (!user || !(await comparePassword(password, user.dataValues.password))) {
@@ -70,6 +67,7 @@ exports.signIn = catchAsync(async (req, res, next) => {
   //  console.log(user.role_users.dataValues);
   //  return;
 
+  // console.log(user.toJSON());
   //create token
   const token = createToken(user.toJSON());
 
@@ -91,8 +89,6 @@ exports.delete = catchAsync(async (req, res, next) => {
 
 exports.protect = catchAsync(async (req, res, next) => {
   let token;
-  //getting token
-  console.log(req.headers);
 
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     token = req.headers.authorization.split(' ')[1];
@@ -120,8 +116,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   //   return next(new appError('El usuario cambió su contraseña recientemente', 401));
   // }
 
-  // console.log(currentUser);
-  //grant the access
+  //store user to headers
   req.user = decoded;
   next();
 });

@@ -29,6 +29,13 @@ Contact.init(
         isEmail: { msg: 'El email no es valido' },
       },
     },
+    message: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        notEmpty: { msg: 'El mensaje es obligatorio' },
+      },
+    },
 
     phone: {
       type: DataTypes.STRING,
@@ -36,11 +43,6 @@ Contact.init(
       validate: {
         isNumeric: { msg: 'Debe tener solamente numeros [1234567890]' },
       },
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Date.now,
     },
   },
   {

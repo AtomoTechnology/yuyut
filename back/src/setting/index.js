@@ -21,8 +21,9 @@ app.listen(port, () => {
   //connect to the database
   sql
     .sync({
+      // force: true,
       force: false,
-      alter: true,
+      // alter: false,
     })
     .then(() => {
       console.log('db connected...');

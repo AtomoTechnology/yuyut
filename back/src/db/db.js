@@ -3,7 +3,8 @@ const sql = new sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.
   host: process.env.DB_HOST,
   dialect: 'mysql',
   define: {
-    timestamps: false,
+    timestamps: true,
+    paranoid: true,
   },
   operatorsAliases: false,
   login: false,

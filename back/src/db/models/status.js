@@ -12,11 +12,6 @@ Status.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    date: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Date.now,
-    },
     name: {
       type: DataTypes.STRING,
       unique: true,

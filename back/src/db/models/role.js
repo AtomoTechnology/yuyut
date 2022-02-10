@@ -20,16 +20,10 @@ Role.init(
         notEmpty: [true, 'El nombre no puede ser vacio'],
         isAlpha: true,
         isIn: {
-          args: [['user', 'admin', 'employee']],
+          args: [['user', 'admin', 'employee', 'responsable']],
           msg: 'Este rol no es valido',
         },
-
-        len: [3, 10],
-      },
-      isEven(value) {
-        if (!value) {
-          throw new Error('El nombre no puede ser vacio');
-        }
+        len: [3, 15],
       },
     },
     description: DataTypes.STRING,
@@ -37,11 +31,15 @@ Role.init(
       type: DataTypes.INTEGER,
       defaultValue: 1,
       allowNull: false,
+      // get() {
+      //   return this.getDataValue('state') === 1 ? 'active' : 'inactive';
+      // },
     },
   },
   {
     sequelize: sql,
     modelName: 'roles',
+    paranoid: true,
   }
 );
 
