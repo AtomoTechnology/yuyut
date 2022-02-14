@@ -1,71 +1,68 @@
 const appError = require('../helpers/appError');
 const catchAsync = require('../helpers/catchAsync');
-const Menu = require('../db/models/menu');
-const Price = require('../db/models/price');
+const Precio = require('../db/models/price');
 const { Op } = require('sequelize');
 
 exports.GetAll = async (req, res, next) => {
-  const menus = await Menu.findAll({
+  const precios = await Precio.findAll({
     where: req.query,
-    order: [['name', 'ASC']],
-    include: Price,
+    order: [['price', 'ASC']],
+    // include: 'users',
     // paranoid: false,
   });
 
   res.status(200).json({
     status: true,
-    results: menus.length,
-    menus,
+    results: precios.length,
+    precios,
   });
 };
 
 exports.Create = catchAsync(async (req, res, next) => {
-  const menu = await Menu.create(req.body);
+  const precio = await Precio.create(req.body);
 
   res.status(201).json({
     status: true,
-    menu,
+    precio,
   });
 });
 
 exports.DeleteOne = catchAsync(async (req, res, next) => {
   const id = req.params.id;
-  const menu = await Menu.destroy({
+  const precio = await Precio.destroy({
     where: { id },
     force: true,
   });
 
-  if (!menu) return next(new appError(`No existe menu con el id : ${id}. `, 400));
+  if (!precio) return next(new appError(`No existe precio con el id : ${id}. `, 400));
 
   res.status(200).json({
     status: true,
-    message: 'Menu borrado con exito.',
   });
 });
 
 exports.UpdateOne = catchAsync(async (req, res, next) => {
   const id = req.params.id;
 
-  const menu = await Menu.update(req.body, {
+  const precio = await Precio.update(req.body, {
     where: { id },
   });
 
-  if (!menu[0]) return next(new appError('No se pudo modificar el menu y/o los datos no se cambiaron...', 400));
+  if (!precio[0]) return next(new appError('No se pudo modificar el precio y/o los datos no se cambiaron...', 400));
 
   res.status(200).json({
     status: true,
-    message: 'menu actualizado con exito',
-    menu,
+    precio,
   });
 });
 
 exports.GetById = catchAsync(async (req, res, next) => {
-  const menu = await Menu.findByPk(req.params.id);
+  const precio = await Precio.findByPk(req.params.id);
 
-  if (!menu) return next(new appError(`No existe menu con el id : ${req.params.id}. `, 400));
+  if (!precio) return next(new appError(`No existe precio con el id : ${req.params.id}. `, 400));
 
   res.status(200).json({
     status: true,
-    menu,
+    precio,
   });
 });

@@ -35,6 +35,11 @@ const createSendToken = async (user, statusCode, res) => {
 };
 
 exports.signUp = catchAsync(async (req, res, next) => {
+  if (!req.body.roleId) {
+    const role = await Role.findOne({ where: { name: 'user' } });
+    req.body.roleId = role.toJSON().id;
+  }
+
   req.body.password = encrypt(req.body.password);
 
   await User.create(req.body);
@@ -72,7 +77,9 @@ exports.signIn = catchAsync(async (req, res, next) => {
   const token = createToken(user.toJSON());
 
   res.status(200).json({
+    status: true,
     token: token,
+    code: process.env.SUCCESS_CODE,
   });
 });
 
@@ -124,12 +131,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
-      return next(
-        new appError(
-          `No tiene permiso para realizar esta accion con el role :  ${req.user.role} .`,
-          403
-        )
-      );
+      return next(new appError(`No tiene permiso para realizar esta accion con el role :  ${req.user.role} .`, 403));
     }
     next();
   };
@@ -150,9 +152,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
   //send email
   try {
-    const resetURL = `${req.protocol}://${req.get(
-      'host'
-    )}/api/v1/users/resetPassword/${resetToken}`;
+    const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
     await new Email(user, resetURL).sendPasswordReset();
     res.status(200).json({
       status: 'success',

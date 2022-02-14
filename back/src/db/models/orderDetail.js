@@ -12,28 +12,28 @@ OrderDetail.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    // idOrder: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false,
-    //   references: {
-    //     model: 'orders',
-    //     key: 'id',
-    //   },
-    //   validate: {
-    //     isNumeric: true,
-    //   },
-    // },
-    // idMenu: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false,
-    //   references: {
-    //     model: 'menus',
-    //     key: 'id',
-    //   },
-    //   validate: {
-    //     isNumeric: true,
-    //   },
-    // },
+    orderId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'orders',
+        key: 'id',
+      },
+      validate: {
+        isNumeric: true,
+      },
+    },
+    menuId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'menus',
+        key: 'id',
+      },
+      validate: {
+        isNumeric: true,
+      },
+    },
     quantity: {
       type: DataTypes.INTEGER,
       allowNull: false,

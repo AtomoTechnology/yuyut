@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const CatchGlobalError = require('../controllers/errorController');
 const appError = require('../helpers/appError');
 const app = express();
@@ -10,6 +11,7 @@ const port = process.env.PORT || 5000;
 
 //middleware
 app.use(express.json());
+app.use(cors());
 
 //router mountain
 app.use(require('./routeMountain'));
@@ -35,9 +37,7 @@ app.listen(port, () => {
 
 //any other path
 app.use('*', (req, res, next) => {
-  next(
-    new appError(`No se pudo encontrar la ruta  : ${req.originalUrl} para este servidor...`, 404)
-  );
+  next(new appError(`No se pudo encontrar la ruta  : ${req.originalUrl} para este servidor...`, 404));
 });
 
 //Global error

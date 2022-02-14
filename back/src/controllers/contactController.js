@@ -1,82 +1,74 @@
 const appError = require('../helpers/appError');
 const catchAsync = require('../helpers/catchAsync');
-const Role = require('./../db/models/role');
+const Contact = require('./../db/models/contact');
 const { Op } = require('sequelize');
 
 exports.GetAll = async (req, res, next) => {
-  const roles = await Role.findAll({
+  const contacts = await Contact.findAll({
     where: req.query,
-    order: [['name', 'ASC']],
-    include: 'users',
-    // paranoid: false,
+    order: [['createdAt', 'ASC']],
   });
 
   res.status(process.env.SUCCESS_CODE).json({
     status: true,
-    results: roles.length,
-    data: { roles },
+    results: contacts.length,
+    contacts,
   });
 };
 
 exports.Create = catchAsync(async (req, res, next) => {
-  const { name, description } = req.body;
-
-  const role = await Role.create({ name, description });
-  console.log(role.toJSON());
-  console.log(role);
-
+  const contact = await Contact.create(req.body);
   res.status(process.env.SUCCESS_CODE).json({
     status: true,
-    msg: 'Rol creado con existo',
-
-    data: { role },
+    message: 'Consulta creado con existo',
+    contact,
   });
 });
 
 exports.DeleteOne = catchAsync(async (req, res, next) => {
   const id = req.params.id;
-  const role = await Role.destroy({
+  const contact = await Contact.destroy({
     where: { id },
     // force: true,
   });
 
-  if (!role) return next(new appError(`No existe role con el id : ${id}. `, process.env.FAIL_CODE));
+  if (!contact) return next(new appError(`No existe contact con el id : ${id}. `, process.env.FAIL_CODE));
 
   res.status(process.env.SUCCESS_CODE).json({
     status: true,
-    msg: 'Rol borrado con existo',
+    msg: 'Consulta borrado con existo',
   });
 });
 
 exports.UpdateOne = catchAsync(async (req, res, next) => {
   const id = req.params.id;
 
-  const role = await Role.update(req.body, {
+  const contact = await Contact.update(req.body, {
     where: { id },
   });
 
-  if (!role[0])
+  if (!contact[0])
     return next(
       new appError(
-        'No se pudo modificar el role y/o los datos no se cambiaron y/o no existe el role con este id...',
+        'No se pudo modificar el contact y/o los datos no se cambiaron y/o no existe el contact con este id...',
         process.env.FAIL_CODE
       )
     );
 
   res.status(process.env.SUCCESS_CODE).json({
     status: true,
-    msg: 'Rol actualizado con existo',
-    data: { role },
+    msg: 'Contacto actualizado con existo',
+    contact,
   });
 });
 
 exports.GetById = catchAsync(async (req, res, next) => {
-  const role = await Role.findByPk(req.params.id);
+  const contact = await Contact.findByPk(req.params.id);
 
-  if (!role) return next(new appError(`No existe role con el id : ${req.params.id}. `, process.env.FAIL_CODE));
+  if (!contact) return next(new appError(`No existe contact con el id : ${req.params.id}. `, process.env.FAIL_CODE));
 
   res.status(process.env.SUCCESS_CODE).json({
     status: true,
-    data: { role },
+    contact,
   });
 });

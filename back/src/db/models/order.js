@@ -12,18 +12,18 @@ Order.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    // idUser: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false,
-    //   references: {
-    //     model: 'users',
-    //     key: 'id',
-    //   },
-    //   validate: {
-    //     isNumeric: true,
-    //   },
-    // },
-    // idMenu: {
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'users',
+        key: 'id',
+      },
+      validate: {
+        isNumeric: true,
+      },
+    },
+    // menuId: {
     //   type: DataTypes.INTEGER,
     //   allowNull: false,
     //   references: {

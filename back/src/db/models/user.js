@@ -12,17 +12,17 @@ User.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    // roleId: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false,
-    //   references: {
-    //     model: 'roles',
-    //     key: 'id',
-    //   },
-    //   validate: {
-    //     isNumeric: true,
-    //   },
-    // },
+    roleId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'roles',
+        key: 'id',
+      },
+      validate: {
+        isNumeric: true,
+      },
+    },
     firstname: {
       type: DataTypes.STRING,
       allowNull: false,

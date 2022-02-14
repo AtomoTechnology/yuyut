@@ -12,28 +12,28 @@ Historyprices.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    // idUser: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false,
-    //   references: {
-    //     model: 'users',
-    //     key: 'id',
-    //   },
-    //   validate: {
-    //     isNumeric: true,
-    //   },
-    // },
-    // idPrecio: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false,
-    //   references: {
-    //     model: 'prices',
-    //     key: 'id',
-    //   },
-    //   validate: {
-    //     isNumeric: true,
-    //   },
-    // },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'users',
+        key: 'id',
+      },
+      validate: {
+        isNumeric: true,
+      },
+    },
+    priceId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'prices',
+        key: 'id',
+      },
+      validate: {
+        isNumeric: true,
+      },
+    },
   },
   {
     sequelize: sql,

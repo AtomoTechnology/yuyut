@@ -12,28 +12,28 @@ StatusOrder.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    // idOrder: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false,
-    //   references: {
-    //     model: 'orders',
-    //     key: 'id',
-    //   },
-    //   validate: {
-    //     isNumeric: true,
-    //   },
-    // },
-    // idStatus: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false,
-    //   references: {
-    //     model: 'statuses',
-    //     key: 'id',
-    //   },
-    //   validate: {
-    //     isNumeric: true,
-    //   },
-    // },
+    orderId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'orders',
+        key: 'id',
+      },
+      validate: {
+        isNumeric: true,
+      },
+    },
+    statusId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'statuses',
+        key: 'id',
+      },
+      validate: {
+        isNumeric: true,
+      },
+    },
   },
   {
     sequelize: sql,

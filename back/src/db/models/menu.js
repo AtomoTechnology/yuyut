@@ -39,14 +39,14 @@ Menu.init(
       allowNull: false,
       // 1 : normal , 2 : Complemento , 3 : Postre
     },
-    // idPrice: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false,
-    //   references: {
-    //     model: 'prices',
-    //     key: 'id',
-    //   },
-    // },
+    priceId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'prices',
+        key: 'id',
+      },
+    },
   },
   {
     sequelize: sql,

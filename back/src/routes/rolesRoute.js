@@ -4,13 +4,9 @@ const authController = require('./../controllers/authController');
 
 router.route('/').get(rolesController.GetAll);
 
-router.use(authController.protect, authController.restrictTo('admin'));
+// router.use(authController.protect, authController.restrictTo('admin'));
 
 router.route('/').post(rolesController.Create);
-router
-  .route('/:id')
-  .get(rolesController.GetById)
-  .put(rolesController.UpdateOne)
-  .delete(rolesController.DeleteOne);
+router.route('/:id').get(rolesController.GetById).put(rolesController.UpdateOne).delete(rolesController.DeleteOne);
 
 module.exports = router;
