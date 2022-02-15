@@ -1,13 +1,17 @@
 const appError = require('../helpers/appError');
 const catchAsync = require('../helpers/catchAsync');
 const Role = require('./../db/models/role');
+const User = require('./../db/models/user');
 const { Op } = require('sequelize');
 
 exports.GetAll = async (req, res, next) => {
   const roles = await Role.findAll({
     where: req.query,
     order: [['name', 'ASC']],
-    include: 'users',
+    include: {
+      attributes: { exclude: ['password'] },
+      model:User,
+    },
     // paranoid: false,
   });
 

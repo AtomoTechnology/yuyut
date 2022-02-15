@@ -2,7 +2,9 @@ const router = require('express').Router();
 const rolesController = require('./../controllers/rolesController');
 const authController = require('./../controllers/authController');
 
-router.route('/').get(rolesController.GetAll);
+
+router.use(authController.protect);
+router.route('/').get(rolesController.GetAll, authController.restrictTo('admin'));
 
 // router.use(authController.protect, authController.restrictTo('admin'));
 
