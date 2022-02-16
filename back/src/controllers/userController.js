@@ -66,19 +66,19 @@ exports.GetAll = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.StatsUsers = catchAsync(async (req, res, next) => {
-  const [resp] = await User.sequelize
-    .query(`select count(usr.id) QuantUsers , max(idRole) , min(idRole)
-                            from users usr
-                            inner join roles rol
-                            on rol.id = usr.idRole
-                            group by usr.state`);
+// exports.StatsUsers = catchAsync(async (req, res, next) => {
+//   const [resp] = await User.sequelize
+//     .query(`select count(usr.id) QuantUsers , max(idRole) , min(idRole)
+//                             from users usr
+//                             inner join roles rol
+//                             on rol.id = usr.idRole
+//                             group by usr.state`);
 
-  console.log(resp);
-  res.json({
-    ok: true,
-  });
-});
+//   console.log(resp);
+//   res.json({
+//     ok: true,
+//   });
+// });
 
 exports.getUser = catchAsync(async (req, res, next) => {
   const user = await User.findByPk(req.params.id);
@@ -104,9 +104,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   console.log(req.file);
   console.log(req.body);
   if (req.body.password || req.body.passwordConfirm) {
-    return next(
-      new AppError('This route is not for password update. Please use /updateMyPassword', 400)
-    );
+    return next(new AppError('This route is not for password update. Please use /updateMyPassword', 400));
   }
 
   //update

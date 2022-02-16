@@ -14,6 +14,7 @@ const createToken = (user) => {
       id: user.id,
       role: user.role.name,
       idRole: user.role.id,
+      fullName: user.fullName,
     },
     process.env.SECRET_TOKEN_YUYUT,
     {
@@ -72,7 +73,7 @@ exports.signIn = catchAsync(async (req, res, next) => {
   //  console.log(user.role_users.dataValues);
   //  return;
 
-  // console.log(user.toJSON());
+  console.log(user.toJSON());
   //create token
   const token = createToken(user.toJSON());
 
