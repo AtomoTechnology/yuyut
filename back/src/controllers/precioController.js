@@ -4,7 +4,7 @@ const Precio = require('../db/models/price');
 const { Op } = require('sequelize');
 
 exports.GetAll = async (req, res, next) => {
-  const precios = await Precio.findAll({
+  const prices = await Precio.findAll({
     where: req.query,
     order: [['price', 'ASC']],
     // include: 'users',
@@ -13,8 +13,8 @@ exports.GetAll = async (req, res, next) => {
 
   res.status(200).json({
     status: true,
-    results: precios.length,
-    precios,
+    results: prices.length,
+    prices,
   });
 };
 
@@ -57,12 +57,12 @@ exports.UpdateOne = catchAsync(async (req, res, next) => {
 });
 
 exports.GetById = catchAsync(async (req, res, next) => {
-  const precio = await Precio.findByPk(req.params.id);
+  const price = await Precio.findByPk(req.params.id);
 
-  if (!precio) return next(new appError(`No existe precio con el id : ${req.params.id}. `, 400));
+  if (!price) return next(new appError(`No existe precio con el id : ${req.params.id}. `, 400));
 
   res.status(200).json({
     status: true,
-    precio,
+    price,
   });
 });

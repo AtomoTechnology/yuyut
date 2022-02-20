@@ -62,7 +62,7 @@ exports.GetAll = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: true,
     results: users.length,
-    data: users,
+    users,
   });
 });
 
@@ -92,42 +92,66 @@ exports.getUser = catchAsync(async (req, res, next) => {
     data: user,
   });
 });
-exports.updateUser = factory.updateOne(User);
-exports.deleteUser = factory.deleteOne(User);
 
-exports.GetMe = (req, res, next) => {
-  req.params.id = req.user.id;
-  next();
-};
-exports.updateMe = catchAsync(async (req, res, next) => {
-  //create error for updating the passoword
-  console.log(req.file);
-  console.log(req.body);
-  if (req.body.password || req.body.passwordConfirm) {
-    return next(new AppError('This route is not for password update. Please use /updateMyPassword', 400));
-  }
+exports.UpdateOne = catchAsync(async (req, res, next) => {
+  const id = req.params.id;
 
-  //update
-  const filterBody = filterObj(req.body, 'name', 'email');
-  if (req.file) filterBody.photo = req.file.filename;
-  const updatedUser = await User.findByIdAndUpdate(req.user.id, filterBody, {
-    new: true,
-    runValidators: true,
+  const user = await User.update(req.body, {
+    where: { id },
   });
 
-  res.status(200).json({
-    status: 'success',
-    data: {
-      user: updatedUser,
-    },
+  if (!user[0])
+    return next(
+      new appError(
+        'No se pudo modificar el usuario',
+        process.env.FAIL_CODE
+      )
+    );
+
+  res.status(process.env.SUCCESS_CODE).json({
+    status: true,
+    msg: 'El usuario fue actualizado con existo',
+    user,
   });
 });
 
-exports.deleteMe = catchAsync(async (req, res, next) => {
-  await User.findByIdAndUpdate(req.user.id, { active: false });
+// exports.updateUser = factory.updateOne(User);
+// exports.deleteUser = factory.deleteOne(User);
 
-  res.status(204).json({
-    status: 'success',
-    data: null,
-  });
-});
+// exports.GetMe = (req, res, next) => {
+//   req.params.id = req.user.id;
+//   next();
+// };
+
+// exports.updateMe = catchAsync(async (req, res, next) => {
+//   //create error for updating the passoword
+//   console.log(req.file);
+//   console.log(req.body);
+//   if (req.body.password || req.body.passwordConfirm) {
+//     return next(new AppError('This route is not for password update. Please use /updateMyPassword', 400));
+//   }
+
+//   //update
+//   const filterBody = filterObj(req.body, 'name', 'email');
+//   if (req.file) filterBody.photo = req.file.filename;
+//   const updatedUser = await User.findByIdAndUpdate(req.user.id, filterBody, {
+//     new: true,
+//     runValidators: true,
+//   });
+
+//   res.status(200).json({
+//     status: 'success',
+//     data: {
+//       user: updatedUser,
+//     },
+//   });
+// });
+
+// exports.deleteMe = catchAsync(async (req, res, next) => {
+//   await User.findByIdAndUpdate(req.user.id, { active: false });
+
+//   res.status(204).json({
+//     status: 'success',
+//     data: null,
+//   });
+// });
