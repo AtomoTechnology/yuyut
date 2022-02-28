@@ -34,7 +34,19 @@ exports.GetAll = catchAsync(async (req, res, next) => {
 });
 
 exports.Create = catchAsync(async (req, res, next) => {
-  const order = await Order.create({ userId: req.body.userId });
+
+  if(req.body.OrderDetail === undefined){
+    return next( appError(process.env.FAIL_CODE,'Debe elegir un menu'));
+  }
+  if(req.body.OrderDetail.length === 0){
+    return next( appError(process.env.FAIL_CODE,'Debe elegir un menu'));
+  }
+  const order = await Order.create(req.body );
+
+  req.body.OrderDetail.forEach(element => {
+    element.orderId = order.id;
+    await OrderDetail.create(element);
+  });
 
   res.status(process.env.SUCCESS_CODE).json({
     status: true,
