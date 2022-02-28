@@ -45,7 +45,7 @@ exports.Create = catchAsync(async (req, res, next) => {
 
   req.body.OrderDetail.forEach(element => {
     element.orderId = order.id;
-    await OrderDetail.create(element);
+     OrderDetail.create(element);
   });
 
   res.status(process.env.SUCCESS_CODE).json({
