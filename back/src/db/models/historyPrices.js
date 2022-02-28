@@ -23,17 +23,18 @@ Historyprices.init(
         isNumeric: true,
       },
     },
-    priceId: {
+    menuId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'prices',
+        model: 'menus',
         key: 'id',
       },
       validate: {
         isNumeric: true,
       },
     },
+    price: DataTypes.DECIMAL,
   },
   {
     sequelize: sql,

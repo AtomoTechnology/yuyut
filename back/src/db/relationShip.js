@@ -15,11 +15,11 @@ User.belongsTo(Role);
 Status.belongsToMany(Order, { through: StatusOrder });
 Order.belongsToMany(Status, { through: StatusOrder });
 
-Price.hasMany(Menu);
-Menu.belongsTo(Price);
+// Price.hasMany(Menu);
+// Menu.belongsTo(Price);
 
-Price.belongsToMany(User, { through: Historyprices });
-User.belongsToMany(Price, { through: Historyprices });
+Menu.belongsToMany(User, { through: Historyprices });
+User.belongsToMany(Menu, { through: Historyprices });
 
 Order.belongsToMany(Menu, { through: OrderDetail });
 Menu.belongsToMany(Order, { through: OrderDetail });

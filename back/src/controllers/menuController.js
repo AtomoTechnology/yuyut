@@ -8,7 +8,7 @@ exports.GetAll = async (req, res, next) => {
   const menus = await Menu.findAll({
     where: req.query,
     order: [['name', 'ASC']],
-    include: Price,
+    // include: Price,
     // paranoid: false,
   });
 
@@ -20,6 +20,7 @@ exports.GetAll = async (req, res, next) => {
 };
 
 exports.Create = catchAsync(async (req, res, next) => {
+  console.log('estoy...');
   const menu = await Menu.create(req.body);
 
   res.status(201).json({

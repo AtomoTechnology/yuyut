@@ -20,6 +20,11 @@ Menu.init(
         notEmpty: [true, 'El nombre no puede ser vacio'],
       },
     },
+    image: {
+      type: DataTypes.TEXT('long'),
+      unique: false,
+      allowNull: true,
+    },
 
     description: {
       type: DataTypes.STRING,
@@ -39,13 +44,9 @@ Menu.init(
       allowNull: false,
       // 1 : normal , 2 : Complemento , 3 : Postre
     },
-    priceId: {
-      type: DataTypes.INTEGER,
+    price: {
+      type: DataTypes.DECIMAL,
       allowNull: false,
-      references: {
-        model: 'prices',
-        key: 'id',
-      },
     },
   },
   {

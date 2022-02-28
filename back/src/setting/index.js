@@ -10,7 +10,7 @@ const sql = require('./../db/db');
 const port = process.env.PORT || 5000;
 
 //middleware
-app.use(express.json());
+app.use(express.json({ limit: '100MB' }));
 app.use(cors());
 
 //router mountain
@@ -25,7 +25,7 @@ app.listen(port, () => {
     .sync({
       // force: true,
       force: false,
-      // alter: false,
+      // alter: true,
     })
     .then(() => {
       console.log('db connected...');
