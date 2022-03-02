@@ -5,7 +5,7 @@ const Menu = require('./models/menu');
 const Order = require('./models/order');
 const Status = require('./models/status');
 const StatusOrder = require('./models/statusOrder');
-const Contact = require('./models/contact');
+const Coupon = require('./models/coupon');
 const Historyprices = require('./models/historyPrices');
 const OrderDetail = require('./models/orderDetail');
 
@@ -26,3 +26,6 @@ Menu.belongsToMany(Order, { through: OrderDetail });
 
 User.hasMany(Order);
 Order.belongsTo(User);
+
+User.hasMany(Coupon);
+Coupon.belongsTo(User);

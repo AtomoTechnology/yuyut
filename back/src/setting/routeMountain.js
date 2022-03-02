@@ -6,5 +6,6 @@ router.use('/api/v1/menus', require('../routes/menusRoute'));
 router.use('/api/v1/prices', require('../routes/precioRoute'));
 router.use('/api/v1/orders', require('../routes/orderRoute'));
 router.use('/api/v1/contacts', require('../routes/contactRoute'));
+router.use('/api/v1/coupons', require('../routes/couponRoute'));
 
 module.exports = router;
