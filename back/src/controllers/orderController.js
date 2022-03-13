@@ -34,18 +34,17 @@ exports.GetAll = catchAsync(async (req, res, next) => {
 });
 
 exports.Create = catchAsync(async (req, res, next) => {
-
-  if(req.body.OrderDetail === undefined){
-    return next( appError(process.env.FAIL_CODE,'Debe elegir un menu'));
+  if (req.body.OrderDetail === undefined) {
+    return next(appError(process.env.FAIL_CODE, 'Debe elegir un menu'));
   }
-  if(req.body.OrderDetail.length === 0){
-    return next( appError(process.env.FAIL_CODE,'Debe elegir un menu'));
+  if (req.body.OrderDetail.length === 0) {
+    return next(appError(process.env.FAIL_CODE, 'Debe elegir un menu'));
   }
-  const order = await Order.create(req.body );
+  const order = await Order.create(req.body);
 
-  req.body.OrderDetail.forEach(element => {
+  req.body.OrderDetail.forEach((element) => {
     element.orderId = order.id;
-     OrderDetail.create(element);
+    OrderDetail.create(element);
   });
 
   res.status(process.env.SUCCESS_CODE).json({
@@ -72,6 +71,31 @@ exports.GetById = catchAsync(async (req, res, next) => {
   res.status(process.env.SUCCESS_CODE).json({
     status: true,
     order,
+  });
+});
+exports.GetByUser = catchAsync(async (req, res, next) => {
+  const orders = await Order.findAll({
+    where: {
+      userId: req.params.userId,
+    },
+    include: [
+      {
+        model: Status,
+      },
+      {
+        model: Menu,
+      },
+      {
+        model: User,
+        attributes: { exclude: ['password'] },
+      },
+    ],
+  });
+
+  res.status(process.env.SUCCESS_CODE).json({
+    status: true,
+    results: orders.length,
+    orders,
   });
 });
 exports.UpdateOne = catchAsync(async (req, res, next) => {});

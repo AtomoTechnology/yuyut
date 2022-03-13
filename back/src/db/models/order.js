@@ -34,6 +34,20 @@ Order.init(
     //     isNumeric: true,
     //   },
     // },
+    subTotal: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    total: {
+      defaultValue: 0,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    discount: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
 
     state: {
       type: DataTypes.INTEGER,

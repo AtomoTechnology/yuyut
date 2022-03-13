@@ -8,5 +8,6 @@ router.route('/').get(orderController.GetAll).post(orderController.Create);
 router.route('/:id').get(orderController.GetById).put(orderController.UpdateOne).delete(orderController.DeleteOne);
 router.post('/:id/updatestatus', orderController.AddStatus);
 router.post('/:id/addmenu', orderController.AddMenu);
+router.get('/user/:userId', authController.restrictTo('usuario', 'admin'), orderController.GetByUser);
 
 module.exports = router;
