@@ -35,13 +35,16 @@ exports.GetAll = catchAsync(async (req, res, next) => {
 
 exports.Create = catchAsync(async (req, res, next) => {
 
+  if(req.body.order === undefined){
+    return next( new appError(process.env.FAIL_CODE,'Debe elegir un menu'));
+  }
   if(req.body.OrderDetail === undefined){
-    return next( appError(process.env.FAIL_CODE,'Debe elegir un menu'));
+    return next( new appError(process.env.FAIL_CODE,'Debe elegir un menu agregar'));
   }
   if(req.body.OrderDetail.length === 0){
-    return next( appError(process.env.FAIL_CODE,'Debe elegir un menu'));
+    return next(  new  appError(process.env.FAIL_CODE,'Debe elegir un menu falta'));
   }
-  const order = await Order.create(req.body );
+  const order = await Order.create(req.body.order );
 
   req.body.OrderDetail.forEach(element => {
     element.orderId = order.id;

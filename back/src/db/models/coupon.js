@@ -11,12 +11,12 @@ Coupon.init(
       unique: true,
       autoIncrement: true,
       primaryKey: true,
-    },
-    userId: {
+    },    
+    coupontypeId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'users',
+        model: 'coupontypes',
         key: 'id',
       },
       validate: {
@@ -25,6 +25,10 @@ Coupon.init(
     },
     nro: {
       type: DataTypes.STRING,
+      allowNull: false
+    },
+    discount: {
+      type: DataTypes.INTEGER,
       allowNull: false
     },    
     expirationDate: {

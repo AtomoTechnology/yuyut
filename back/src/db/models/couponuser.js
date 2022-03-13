@@ -1,9 +1,9 @@
 const { Model, DataTypes } = require('sequelize');
-const sql = require('./../db');
+const sql = require('../db');
 
-class Order extends Model {}
+class CouponUser extends Model {}
 
-Order.init(
+CouponUser.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -23,26 +23,27 @@ Order.init(
         isNumeric: true,
       },
     },
-    total: {
-      type: DataTypes.DECIMAL,
-      allowNull: false,     
-    },
-    state: {
+    couponId: {
       type: DataTypes.INTEGER,
-      defaultValue: 1,
       allowNull: false,
+      references: {
+        model: 'coupons',
+        key: 'id',
+      },
       validate: {
-        isIn: {
-          args: [[1, 0]],
-          msg: 'Solo permite 0 | 1',
-        },
+        isNumeric: true,
       },
     },
+    state: {
+        type: DataTypes.INTEGER,
+        defaultValue: 1,
+        allowNull: false,
+      },
   },
   {
     sequelize: sql,
-    modelName: 'orders',
+    modelName: 'couponusers',
   }
 );
 
-module.exports = Order;
+module.exports = CouponUser;

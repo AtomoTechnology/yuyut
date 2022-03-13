@@ -25,7 +25,7 @@ app.listen(port, () => {
     .sync({
       // force: true,
       force: false,
-      // alter: true,
+      alter: false,
     })
     .then(() => {
       console.log('db connected...');

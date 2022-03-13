@@ -8,6 +8,8 @@ const StatusOrder = require('./models/statusOrder');
 const Coupon = require('./models/coupon');
 const Historyprices = require('./models/historyPrices');
 const OrderDetail = require('./models/orderDetail');
+const CouponType = require('./models/coupontype');
+const CouponUser = require('./models/couponuser');
 
 Role.hasMany(User);
 User.belongsTo(Role);
@@ -27,5 +29,8 @@ Menu.belongsToMany(Order, { through: OrderDetail });
 User.hasMany(Order);
 Order.belongsTo(User);
 
-User.hasMany(Coupon);
-Coupon.belongsTo(User);
+User.belongsToMany(Coupon, { through: CouponUser });
+Coupon.belongsToMany(User, { through: CouponUser });
+
+CouponType.hasMany(Coupon);
+Coupon.belongsTo(CouponType);
