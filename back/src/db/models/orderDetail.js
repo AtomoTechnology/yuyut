@@ -42,6 +42,10 @@ OrderDetail.init(
         isNumeric: { msg: 'Debe ser un numero entero' },
       },
     },
+    subtotal: {
+      type: DataTypes.DECIMAL,
+      allowNull: false,     
+    },
   },
   {
     sequelize: sql,

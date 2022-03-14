@@ -1,9 +1,9 @@
 const { Model, DataTypes } = require('sequelize');
 const sql = require('../db');
 
-class Coupon extends Model {}
+class CouponUser extends Model {}
 
-Coupon.init(
+CouponUser.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -11,30 +11,28 @@ Coupon.init(
       unique: true,
       autoIncrement: true,
       primaryKey: true,
-    },    
-    coupontypeId: {
+    },
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'coupontypes',
+        model: 'users',
         key: 'id',
       },
       validate: {
         isNumeric: true,
       },
     },
-    nro: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    discount: {
+    couponId: {
       type: DataTypes.INTEGER,
-      allowNull: false
-    },    
-    expirationDate: {
-      type: DataTypes.DATE,
-      unique: false,
       allowNull: false,
+      references: {
+        model: 'coupons',
+        key: 'id',
+      },
+      validate: {
+        isNumeric: true,
+      },
     },
     state: {
         type: DataTypes.INTEGER,
@@ -44,8 +42,8 @@ Coupon.init(
   },
   {
     sequelize: sql,
-    modelName: 'coupons',
+    modelName: 'couponusers',
   }
 );
 
-module.exports = Coupon;
+module.exports = CouponUser;
