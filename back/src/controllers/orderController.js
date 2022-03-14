@@ -39,10 +39,10 @@ exports.Create = catchAsync(async (req, res, next) => {
     return next( new appError(process.env.FAIL_CODE,'Debe elegir un menu'));
   }
   if(req.body.OrderDetail === undefined){
-    return next( new appError(process.env.FAIL_CODE,'Debe elegir un menu agregar'));
+    return next( new appError(process.env.FAIL_CODE,'Debe agregar la cantidad'));
   }
   if(req.body.OrderDetail.length === 0){
-    return next(  new  appError(process.env.FAIL_CODE,'Debe elegir un menu falta'));
+    return next(  new  appError(process.env.FAIL_CODE,'Debe elegir un menu'));
   }
   const order = await Order.create(req.body.order );
 
