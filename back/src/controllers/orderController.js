@@ -34,17 +34,20 @@ exports.GetAll = catchAsync(async (req, res, next) => {
 });
 
 exports.Create = catchAsync(async (req, res, next) => {
+  if (req.body.order === undefined) {
+    return next(new appError(process.env.FAIL_CODE, 'Debe elegir un menu'));
+  }
   if (req.body.OrderDetail === undefined) {
-    return next(appError(process.env.FAIL_CODE, 'Debe elegir un menu'));
+    return next(new appError(process.env.FAIL_CODE, 'Debe agregar la cantidad'));
   }
   if (req.body.OrderDetail.length === 0) {
-    return next(appError(process.env.FAIL_CODE, 'Debe elegir un menu'));
+    return next(new appError(process.env.FAIL_CODE, 'Debe elegir un menu'));
   }
-  const order = await Order.create(req.body);
+  const order = await Order.create(req.body.order);
 
-  req.body.OrderDetail.forEach((element) => {
+  req.body.OrderDetail.forEach(async (element) => {
     element.orderId = order.id;
-    OrderDetail.create(element);
+    await OrderDetail.create(element);
   });
 
   res.status(process.env.SUCCESS_CODE).json({
@@ -52,6 +55,7 @@ exports.Create = catchAsync(async (req, res, next) => {
     order,
   });
 });
+
 exports.GetById = catchAsync(async (req, res, next) => {
   const order = await Order.findByPk(req.params.id, {
     include: [
