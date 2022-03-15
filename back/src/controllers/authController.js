@@ -192,8 +192,9 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
   // Get the user
+  console.log(req.user);
   const user = await User.findOne({ where: { id: req.user.id } });
-
+  console.log('first');
   // check password
   if (!user || !(await comparePassword(req.body.currentPassword, user.password))) {
     return next(new appError('Contraseña Incorrecta', 401));

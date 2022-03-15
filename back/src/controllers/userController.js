@@ -95,8 +95,9 @@ exports.getUser = catchAsync(async (req, res, next) => {
 
 exports.UpdateOne = catchAsync(async (req, res, next) => {
   const id = req.params.id;
+  console.log(req.body);
 
-  const user = await User.update(req.body, {
+  await User.update(req.body, {
     where: { id },
   });
 
@@ -111,7 +112,6 @@ exports.UpdateOne = catchAsync(async (req, res, next) => {
   res.status(process.env.SUCCESS_CODE).json({
     status: true,
     msg: 'El usuario fue actualizado con existo',
-    user,
   });
 });
 
