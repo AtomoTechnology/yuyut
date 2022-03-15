@@ -192,19 +192,21 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
   // Get the user
-  const user = await User.findOne({ email: req.user.email }).select('+password');
+  const user = await User.findOne({ where: { id: req.user.id } });
 
-  //check password
-  if (!user || !(await user.checkPassword(req.body.currentPassword, user.password))) {
-    return next(new AppError('Wrong password', 401));
+  // check password
+  if (!user || !(await comparePassword(req.body.currentPassword, user.password))) {
+    return next(new appError('Contraseña Incorrecta', 401));
   }
+  req.body.password = encrypt(req.body.password);
+  User.update({ password: req.body.password }, { where: { id: req.user.id } });
 
   //update password
-  user.password = req.body.password;
-  user.passwordConfirm = req.body.passwordConfirm;
-  await user.save();
-  //User.findByIdAndUpdate() will not work
+  // const token = createToken(user.toJSON());
 
-  //log in user
-  createSendToken(user, 200, res);
+  res.status(200).json({
+    status: true,
+    // token: token,
+    message: 'Contraseña actualizada con exito...',
+  });
 });

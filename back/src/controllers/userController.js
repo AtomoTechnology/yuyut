@@ -100,13 +100,13 @@ exports.UpdateOne = catchAsync(async (req, res, next) => {
     where: { id },
   });
 
-  if (!user[0])
-    return next(
-      new appError(
-        'No se pudo modificar el usuario',
-        process.env.FAIL_CODE
-      )
-    );
+  // if (!user[0])
+  //   return next(
+  //     new appError(
+  //       'No se pudo modificar el usuario',
+  //       process.env.FAIL_CODE
+  //     )
+  //   );
 
   res.status(process.env.SUCCESS_CODE).json({
     status: true,
