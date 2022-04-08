@@ -35,6 +35,11 @@ Coupon.init(
       type: DataTypes.DATE,
       unique: false,
       allowNull: false,
+    },    
+    condition: {
+      type: DataTypes.STRING,
+      unique: false,
+      allowNull: false,
     },
     state: {
         type: DataTypes.INTEGER,
